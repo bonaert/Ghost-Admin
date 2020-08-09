@@ -42,6 +42,7 @@ export default ModalComponent.extend({
     defaultButtonIcons: null,
     isShowModalLink: true,
     customIcon: null,
+    showLinksPage: false,
     confirm() {},
 
     signupButtonText: boundOneWay('settings.portalButtonSignupText'),
@@ -135,6 +136,9 @@ export default ModalComponent.extend({
         this.iconExtensions = ICON_EXTENSIONS;
         const portalButtonIcon = this.settings.get('portalButtonIcon') || '';
         const defaultIconKeys = this.defaultButtonIcons.map(buttonIcon => buttonIcon.value);
+        if (!portalButtonIcon) {
+            this.set('buttonIcon', defaultIconKeys[0]);
+        }
         if (portalButtonIcon && !defaultIconKeys.includes(portalButtonIcon)) {
             this.set('customIcon', this.settings.get('portalButtonIcon'));
         }
@@ -168,7 +172,13 @@ export default ModalComponent.extend({
         },
 
         switchPreviewPage(page) {
-            this.set('page', page);
+            if (page === 'links') {
+                this.set('showLinksPage', true);
+                this.set('page', '');
+            } else {
+                this.set('showLinksPage', false);
+                this.set('page', page);
+            }
         },
 
         validateAccentColor() {
